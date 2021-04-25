@@ -13,7 +13,7 @@ const getTimePeriod = () => {
     date.getDate()
   ).toISOString();
 
-  date = new Date(date.setDate(date.getDate() - 30));
+  date = new Date(date.setDate(date.getDate() - 90));
 
   const date_ini = new Date(
     date.getFullYear(),
