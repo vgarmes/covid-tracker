@@ -35,7 +35,7 @@ export const fetchData = async () => {
 
 export const fetchDailyData = async (country) => {
   let changeableUrl = "";
-  if (country) {
+  if (country && country !== "global") {
     changeableUrl = `${url}/country/${country}?${getTimeParams()}`;
   } else {
     changeableUrl = `${url}/world?${getTimeParams()}`;
@@ -51,8 +51,7 @@ export const fetchDailyData = async (country) => {
     });
 
     /*Data with a Province value is filtered out*/
-    if (country) {
-      data = data;
+    if (country && country !== "global") {
       data = data
         .filter(({ Province }) => Province === "")
         .map(({ Date, Confirmed, Deaths, Recovered, Province }) => {
