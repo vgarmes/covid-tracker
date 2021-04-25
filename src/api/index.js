@@ -1,10 +1,8 @@
-const url = "https://api.covid19api.com/world/total";
+const url = "https://api.covid19api.com";
 
-const getDailyUrl = () => {
+const getTimeParams = () => {
   const { date_ini, date_end } = getTimePeriod();
-  const url =
-    "https://api.covid19api.com/world?from=" + date_ini + "&to=" + date_end;
-  return url;
+  return `from=${date_ini}&to=${date_end}`;
 };
 
 const getTimePeriod = () => {
@@ -35,15 +33,53 @@ export const fetchData = async () => {
   } catch (error) {}
 };
 
-export const fetchDailyData = async () => {
+export const fetchDailyData = async (country) => {
+  let changeableUrl = "";
+  if (country) {
+    changeableUrl = `${url}/country/${country}?${getTimeParams()}`;
+  } else {
+    changeableUrl = `${url}/world?${getTimeParams()}`;
+  }
+
   try {
-    const response = await fetch(getDailyUrl());
-    const data = await response.json();
+    const response = await fetch(changeableUrl);
+    let data = await response.json();
 
     /*data has to be sorted by date*/
     data.sort(function (a, b) {
       return new Date(a.Date) - new Date(b.Date);
     });
+
+    /*Data with a Province value is filtered out*/
+    if (country) {
+      data = data;
+      data = data
+        .filter(({ Province }) => Province === "")
+        .map(({ Date, Confirmed, Deaths, Recovered, Province }) => {
+          return {
+            Date: Date,
+            TotalConfirmed: Confirmed,
+            TotalDeaths: Deaths,
+            TotalRecovered: Recovered,
+          };
+        });
+    }
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchCountries = async () => {
+  try {
+    const response = await fetch(`${url}/countries`);
+    const data = await response.json();
+    /*const countryList = data.map(({ Country }) => Country).sort();*/
+    const countryList = data.sort((a, b) =>
+      a.Country > b.Country ? 1 : b.Country > a.Country ? -1 : 0
+    );
+    return countryList;
+  } catch (error) {
+    console.log(error);
+  }
 };
