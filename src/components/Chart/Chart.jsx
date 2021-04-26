@@ -3,7 +3,7 @@ import { Line, Bar } from "react-chartjs-2";
 import styles from "./Chart.module.css";
 import ChartPicker from "../ChartPicker/ChartPicker";
 
-const Chart = ({ dailyData, country }) => {
+const Chart = ({ dailyData }) => {
   const [showBarChart, setShowBarChart] = useState(false);
   const changeChart = () => {
     setShowBarChart(!showBarChart);
