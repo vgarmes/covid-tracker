@@ -35,7 +35,7 @@ export const fetchData = async () => {
 
 export const fetchDailyData = async (country) => {
   let changeableUrl = "";
-  if (country && country !== "global") {
+  if (country) {
     changeableUrl = `${url}/country/${country}?${getTimeParams()}`;
   } else {
     changeableUrl = `${url}/world?${getTimeParams()}`;
@@ -50,7 +50,7 @@ export const fetchDailyData = async (country) => {
       return new Date(a.Date) - new Date(b.Date);
     });
 
-    if (country && country !== "global") {
+    if (country) {
       /*Data with a Province value is filtered out*/
       data = data.filter(({ Province }) => Province === "");
       /*Generate incremental values and clean up if they are negative*/
@@ -90,9 +90,7 @@ export const fetchCountries = async () => {
   try {
     const response = await fetch(`${url}/summary`);
     const data = await response.json();
-    /*const countryList = data.sort((a, b) =>
-      a.Country > b.Country ? 1 : b.Country > a.Country ? -1 : 0
-    );*/
+    /* countries are fetched from /summary instead of /countries because the latter introduces Provinces*/
 
     const countryList = data["Countries"].map(({ Country, Slug }) => {
       return {
