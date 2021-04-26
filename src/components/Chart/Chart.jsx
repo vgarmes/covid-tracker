@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import styles from "./Chart.module.css";
 import ChartPicker from "../ChartPicker/ChartPicker";
