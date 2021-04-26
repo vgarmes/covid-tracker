@@ -32,13 +32,13 @@ class App extends React.Component {
   };
 
   render() {
-    const { data } = this.state;
+    const { data, country } = this.state;
     return (
       <div className={styles.container}>
         {this.state.msg && <Alert severity="error">{this.state.msg}</Alert>}
         <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Cards {...data[data.length - 1]} />
-        <Chart dailyData={data} />
+        <Chart dailyData={data} country={country} />
       </div>
     );
   }

@@ -50,18 +50,35 @@ export const fetchDailyData = async (country) => {
       return new Date(a.Date) - new Date(b.Date);
     });
 
-    /*Data with a Province value is filtered out*/
     if (country && country !== "global") {
-      data = data
-        .filter(({ Province }) => Province === "")
-        .map(({ Date, Confirmed, Deaths, Recovered, Province }) => {
+      /*Data with a Province value is filtered out*/
+      data = data.filter(({ Province }) => Province === "");
+      /*Generate incremental values and clean up if they are negative*/
+      data = data.map(({ Date, Confirmed, Deaths, Recovered }, index) => {
+        if (index > 0) {
           return {
             Date: Date,
             TotalConfirmed: Confirmed,
             TotalDeaths: Deaths,
             TotalRecovered: Recovered,
+            NewConfirmed:
+              Confirmed >= data[index - 1]["Confirmed"]
+                ? Confirmed - data[index - 1]["Confirmed"]
+                : 0,
+            NewDeaths:
+              Deaths >= data[index - 1]["Deaths"]
+                ? Deaths - data[index - 1]["Deaths"]
+                : 0,
+            NewRecovered:
+              Recovered > data[index - 1]["Recovered"]
+                ? Recovered - data[index - 1]["Recovered"]
+                : 0,
           };
-        });
+        } else {
+          return "";
+        }
+      });
+      data.shift();
     }
     return data;
   } catch (error) {
