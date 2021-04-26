@@ -26,6 +26,19 @@ const Chart = ({ dailyData }) => {
       }}
     />
   ) : null;
+
+  const barChar = dailyData.length ? (
+    <Bar
+      data={{
+        labels: ["Infected", "Recovered", "Deaths"],
+        datasets: [{}],
+      }}
+      options={{
+        legend: { display: false },
+        title: { display: true, text: `Current state in` },
+      }}
+    />
+  ) : null;
   return <div className={styles.container}>{lineChart}</div>;
 };
 

@@ -71,12 +71,18 @@ export const fetchDailyData = async (country) => {
 
 export const fetchCountries = async () => {
   try {
-    const response = await fetch(`${url}/countries`);
+    const response = await fetch(`${url}/summary`);
     const data = await response.json();
-    /*const countryList = data.map(({ Country }) => Country).sort();*/
-    const countryList = data.sort((a, b) =>
+    /*const countryList = data.sort((a, b) =>
       a.Country > b.Country ? 1 : b.Country > a.Country ? -1 : 0
-    );
+    );*/
+
+    const countryList = data["Countries"].map(({ Country, Slug }) => {
+      return {
+        Country,
+        Slug,
+      };
+    });
     return countryList;
   } catch (error) {
     console.log(error);
