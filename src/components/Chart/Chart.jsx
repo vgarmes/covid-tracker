@@ -90,7 +90,6 @@ const Chart = ({ dailyData }) => {
 
   const barChartOptions = {
     onResize: function (chart, size) {
-      console.log(size);
       if (size.width < 450) {
         chart.options.scales.x.ticks.display = false;
         chart.options.scales.x.grid.display = false;
