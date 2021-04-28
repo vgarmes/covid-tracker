@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import styles from "./Chart.module.css";
 import ChartPicker from "../ChartPicker/ChartPicker";
+import { useWindowSize } from "../../hooks/useWindowSize";
+
+const breakpointWidth = 450;
 
 const Chart = ({ dailyData }) => {
   const [showBarChart, setShowBarChart] = useState(false);
   const switchChart = () => {
     setShowBarChart(!showBarChart);
   };
+  const windowSize = useWindowSize();
 
   const lineChartData = [
     {
@@ -40,18 +44,15 @@ const Chart = ({ dailyData }) => {
   ];
 
   const lineChartOptions = {
-    onResize: function (chart, size) {
-      if (size.width < 450) {
-        chart.options.scales.x.ticks.display = false;
-        chart.options.scales.x.grid.display = false;
-        chart.update();
-      } else {
-        chart.options.scales.x.ticks.display = true;
-        chart.options.scales.x.grid.display = true;
-        chart.update();
-      }
-    },
     scales: {
+      x: {
+        ticks: {
+          display: windowSize.width < breakpointWidth ? false : true,
+        },
+        grid: {
+          display: windowSize.width < breakpointWidth ? false : true,
+        },
+      },
       y: {
         ticks: {
           callback: function (value, index, values) {
@@ -89,18 +90,15 @@ const Chart = ({ dailyData }) => {
   ];
 
   const barChartOptions = {
-    onResize: function (chart, size) {
-      if (size.width < 450) {
-        chart.options.scales.x.ticks.display = false;
-        chart.options.scales.x.grid.display = false;
-        chart.update();
-      } else {
-        chart.options.scales.x.ticks.display = true;
-        chart.options.scales.x.grid.display = true;
-        chart.update();
-      }
-    },
     scales: {
+      x: {
+        ticks: {
+          display: windowSize.width < breakpointWidth ? false : true,
+        },
+        grid: {
+          display: windowSize.width < breakpointWidth ? false : true,
+        },
+      },
       y: {
         ticks: {
           callback: function (value, index, values) {

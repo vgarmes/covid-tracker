@@ -38,7 +38,7 @@ class App extends React.Component {
         {this.state.msg && <Alert severity="error">{this.state.msg}</Alert>}
         <CountryPicker handleCountryChange={this.handleCountryChange} />
         <Cards {...data[data.length - 1]} />
-        <Chart dailyData={data} country={country} />
+        <Chart dailyData={data} />
       </div>
     );
   }
