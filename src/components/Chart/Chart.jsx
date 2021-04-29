@@ -127,6 +127,7 @@ const Chart = ({ dailyData }) => {
       <Bar data={barChartData[1]} options={barChartOptions} />
     </>
   ) : null;
+
   return (
     <>
       <ChartPicker showBarChart={showBarChart} switchChart={switchChart} />

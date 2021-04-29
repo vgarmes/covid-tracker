@@ -1,6 +1,13 @@
 import React from "react";
 
-import { Navbar, Cards, LastUpdate, Chart, CountryPicker } from "./components";
+import {
+  Navbar,
+  Cards,
+  LastUpdate,
+  Chart,
+  CountryPicker,
+  Loading,
+} from "./components";
 import { Alert } from "@material-ui/lab";
 import styles from "./App.module.css";
 import { fetchDailyData } from "./api";
@@ -38,22 +45,19 @@ class App extends React.Component {
   render() {
     const { data, loading, error } = this.state;
 
-    if (loading) {
-      return "Loading...";
-    }
-
-    if (error) {
-      return <Alert severity="error">{this.state.msg}</Alert>;
-    }
-
     return (
       <>
         <Navbar />
         <div className={styles.container}>
-          <CountryPicker handleCountryChange={this.handleCountryChange} />
-          <Cards dailyData={data} />
-          <LastUpdate {...data[data.length - 1]} />
-          <Chart dailyData={data} />
+          {error && <Alert severity="error">{this.state.msg}</Alert>}
+          {!loading && (
+            <>
+              <CountryPicker handleCountryChange={this.handleCountryChange} />
+              <Cards dailyData={data} />
+              <LastUpdate {...data[data.length - 1]} />
+              <Chart dailyData={data} />
+            </>
+          )}
         </div>
       </>
     );
