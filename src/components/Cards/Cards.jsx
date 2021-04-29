@@ -1,8 +1,22 @@
 import React from "react";
-import { Card, CardContent, Typography, Grid } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Tooltip,
+} from "@material-ui/core";
 import styles from "./Cards.module.css";
 import CountUp from "react-countup";
 import cx from "classnames";
+
+const tooltipTitles = {
+  confirmed:
+    "This number shows the cumulative number of confirmed human cases reported to date. The actual number of infections and cases is likely to be higher than reported. Reporting criteria and testing capacity vary between locations.",
+  recovered:
+    "May not correspond to actual current figures and not all recoveries may be reported. Reporting criteria vary between locations and some countries do not report recoveries.",
+  deaths: "Reporting criteria vary between locations.",
+};
 
 const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
   if (!TotalConfirmed) {
@@ -21,7 +35,7 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
         >
           <CardContent>
             <Typography color="textSecondary" gutterBottom>
-              Infected
+              Cases
             </Typography>
             <Typography variant="h5">
               <CountUp
@@ -31,10 +45,11 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 separator=","
               />
             </Typography>
-            <Typography color="textSecondary">{Date.slice(0, 10)}</Typography>
-            <Typography variant="body2">
-              Number of active cases of COVID-19
-            </Typography>
+            <Tooltip title={tooltipTitles.confirmed}>
+              <Typography variant="body2">
+                Number of cumulative confirmed cases to date*
+              </Typography>
+            </Tooltip>
           </CardContent>
         </Grid>
         <Grid
@@ -56,10 +71,11 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 separator=","
               />
             </Typography>
-            <Typography color="textSecondary">{Date.slice(0, 10)}</Typography>
-            <Typography variant="body2">
-              Number of recoveries from COVID-19
-            </Typography>
+            <Tooltip title={tooltipTitles.recovered}>
+              <Typography variant="body2">
+                Number of cumulative recoveries to date*
+              </Typography>
+            </Tooltip>
           </CardContent>
         </Grid>
         <Grid
@@ -81,10 +97,11 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 separator=","
               />
             </Typography>
-            <Typography color="textSecondary">{Date.slice(0, 10)}</Typography>
-            <Typography variant="body2">
-              Number of deaths caused by COVID-19
-            </Typography>
+            <Tooltip title={tooltipTitles.deaths}>
+              <Typography variant="body2">
+                Number of cumulative deaths caused to date*
+              </Typography>
+            </Tooltip>
           </CardContent>
         </Grid>
       </Grid>
