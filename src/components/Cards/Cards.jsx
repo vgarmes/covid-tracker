@@ -76,9 +76,7 @@ const Cards = ({ dailyData }) => {
                     : styles.greenText
                 }
               >
-                {`(${
-                  NewConfirmed === 0 ? "" : "+"
-                }${NewConfirmed.toLocaleString()}) `}
+                {`(+${NewConfirmed.toLocaleString()}) `}
                 {NewConfirmed > averageValues.confirmed ? (
                   <FaArrowUp className={styles.iconStatus} />
                 ) : (
@@ -115,9 +113,7 @@ const Cards = ({ dailyData }) => {
             </Typography>
             <Fade in={showIncrement}>
               <Typography variant="h6">
-                {`(${
-                  NewRecovered === 0 ? "" : "+"
-                }${NewRecovered.toLocaleString()}) `}
+                {`(+${NewRecovered.toLocaleString()}) `}
               </Typography>
             </Fade>
             <Tooltip title={tooltipTitles.recovered}>
@@ -155,9 +151,7 @@ const Cards = ({ dailyData }) => {
                     : styles.greenText
                 }
               >
-                {`(${
-                  NewDeaths === 0 ? "" : "+"
-                }${NewDeaths.toLocaleString()}) `}
+                {`(+${NewDeaths.toLocaleString()}) `}
                 {NewDeaths > averageValues.deaths ? (
                   <FaArrowUp className={styles.iconStatus} />
                 ) : (
