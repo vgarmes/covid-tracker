@@ -18,6 +18,24 @@
   border-bottom: 10px solid rgba(255, 0, 0, 0.5);
 }
 
+.redText {
+  color: red;
+}
+.greenText {
+  color: green;
+}
+
+.iconStatus {
+  vertical-align: middle;
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
 @media (max-width: 770px) {
   .card {
     margin: 2% 3% !important;

@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
   Typography,
   Grid,
   Tooltip,
+  Fade,
 } from "@material-ui/core";
 import styles from "./Cards.module.css";
 import CountUp from "react-countup";
 import cx from "classnames";
+import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const tooltipTitles = {
   confirmed:
@@ -18,10 +20,29 @@ const tooltipTitles = {
   deaths: "Reporting criteria vary between locations.",
 };
 
-const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
-  if (!TotalConfirmed) {
-    return "Loading...";
-  }
+const Cards = ({ dailyData }) => {
+  const [showIncrement, setShowIncrement] = useState(false);
+
+  const {
+    TotalConfirmed,
+    TotalDeaths,
+    TotalRecovered,
+    NewConfirmed,
+    NewDeaths,
+    NewRecovered,
+  } = dailyData[dailyData.length - 1];
+
+  const averageValues = {
+    confirmed: Math.floor(
+      (TotalConfirmed - dailyData[0].TotalConfirmed) / dailyData.length
+    ),
+    recovered: Math.floor(
+      (TotalRecovered - dailyData[0].TotalRecovered) / dailyData.length
+    ),
+    deaths: Math.floor(
+      (TotalDeaths - dailyData[0].TotalDeaths) / dailyData.length
+    ),
+  };
 
   return (
     <div className={styles.container}>
@@ -43,8 +64,29 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 end={TotalConfirmed}
                 duration={2.5}
                 separator=","
+                onEnd={() => setShowIncrement(true)}
               />
             </Typography>
+            <Fade in={showIncrement}>
+              <Typography
+                variant="h6"
+                className={
+                  NewConfirmed > averageValues.confirmed
+                    ? styles.redText
+                    : styles.greenText
+                }
+              >
+                {`(${
+                  NewConfirmed === 0 ? "" : "+"
+                }${NewConfirmed.toLocaleString()}) `}
+                {NewConfirmed > averageValues.confirmed ? (
+                  <FaArrowUp className={styles.iconStatus} />
+                ) : (
+                  <FaArrowDown className={styles.iconStatus} />
+                )}
+              </Typography>
+            </Fade>
+
             <Tooltip title={tooltipTitles.confirmed}>
               <Typography variant="body2">
                 Number of cumulative confirmed cases to date*
@@ -71,6 +113,13 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 separator=","
               />
             </Typography>
+            <Fade in={showIncrement}>
+              <Typography variant="h6">
+                {`(${
+                  NewRecovered === 0 ? "" : "+"
+                }${NewRecovered.toLocaleString()}) `}
+              </Typography>
+            </Fade>
             <Tooltip title={tooltipTitles.recovered}>
               <Typography variant="body2">
                 Number of cumulative recoveries to date*
@@ -97,6 +146,25 @@ const Cards = ({ Date, TotalConfirmed, TotalDeaths, TotalRecovered }) => {
                 separator=","
               />
             </Typography>
+            <Fade in={showIncrement}>
+              <Typography
+                variant="h6"
+                className={
+                  NewDeaths > averageValues.deaths
+                    ? styles.redText
+                    : styles.greenText
+                }
+              >
+                {`(${
+                  NewDeaths === 0 ? "" : "+"
+                }${NewDeaths.toLocaleString()}) `}
+                {NewDeaths > averageValues.deaths ? (
+                  <FaArrowUp className={styles.iconStatus} />
+                ) : (
+                  <FaArrowDown className={styles.iconStatus} />
+                )}
+              </Typography>
+            </Fade>
             <Tooltip title={tooltipTitles.deaths}>
               <Typography variant="body2">
                 Number of cumulative deaths caused to date*

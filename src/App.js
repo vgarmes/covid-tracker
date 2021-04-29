@@ -9,17 +9,21 @@ class App extends React.Component {
   state = {
     data: [],
     country: "",
-    msg: "",
+    error: "",
+    loading: true,
   };
+
   async componentDidMount() {
+    this.setState({ loading: true });
     const fetchedData = await fetchDailyData();
     if (fetchedData.length > 0) {
       this.setState({ data: fetchedData, msg: "" });
     } else {
       this.setState({
-        msg: "Data not available!",
+        error: "Data not available!",
       });
     }
+    this.setState({ loading: false });
   }
 
   handleCountryChange = async (country) => {
@@ -27,19 +31,27 @@ class App extends React.Component {
     if (fetchedData.length > 0) {
       this.setState({ data: fetchedData, country: country, msg: "" });
     } else {
-      this.setState({ msg: "Data not available!" });
+      this.setState({ error: "Data not available!" });
     }
   };
 
   render() {
-    const { data, country } = this.state;
+    const { data, loading, error } = this.state;
+
+    if (loading) {
+      return "Loading...";
+    }
+
+    if (error) {
+      return <Alert severity="error">{this.state.msg}</Alert>;
+    }
+
     return (
       <>
         <Navbar />
         <div className={styles.container}>
-          {this.state.msg && <Alert severity="error">{this.state.msg}</Alert>}
           <CountryPicker handleCountryChange={this.handleCountryChange} />
-          <Cards {...data[data.length - 1]} />
+          <Cards dailyData={data} />
           <LastUpdate {...data[data.length - 1]} />
           <Chart dailyData={data} />
         </div>
