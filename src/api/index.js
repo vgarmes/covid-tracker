@@ -24,15 +24,6 @@ const getTimePeriod = () => {
   return { date_ini, date_end };
 };
 
-export const fetchData = async () => {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    return data;
-  } catch (error) {}
-};
-
 export const fetchDailyData = async (country) => {
   let changeableUrl = "";
   if (country) {
@@ -51,39 +42,44 @@ export const fetchDailyData = async (country) => {
     });
 
     if (country) {
-      /*Data with a Province value is filtered out*/
-      data = data.filter(({ Province }) => Province === "");
-      /*Generate incremental values and clean up if they are negative*/
-      data = data.map(({ Date, Confirmed, Deaths, Recovered }, index) => {
-        if (index > 0) {
-          return {
-            Date: Date,
-            TotalConfirmed: Confirmed,
-            TotalDeaths: Deaths,
-            TotalRecovered: Recovered,
-            NewConfirmed:
-              Confirmed >= data[index - 1]["Confirmed"]
-                ? Confirmed - data[index - 1]["Confirmed"]
-                : 0,
-            NewDeaths:
-              Deaths >= data[index - 1]["Deaths"]
-                ? Deaths - data[index - 1]["Deaths"]
-                : 0,
-            NewRecovered:
-              Recovered > data[index - 1]["Recovered"]
-                ? Recovered - data[index - 1]["Recovered"]
-                : 0,
-          };
-        } else {
-          return "";
-        }
-      });
-      data.shift();
+      data = cleanData(data);
     }
     return data;
   } catch (error) {
     console.log(error);
   }
+};
+
+const cleanData = (data) => {
+  /*Data with a Province value is filtered out*/
+  data = data.filter(({ Province }) => Province === "");
+  /*Generate incremental values and clean up if they are negative*/
+  data = data.map(({ Date, Confirmed, Deaths, Recovered }, index) => {
+    if (index > 0) {
+      return {
+        Date: Date,
+        TotalConfirmed: Confirmed,
+        TotalDeaths: Deaths,
+        TotalRecovered: Recovered,
+        NewConfirmed:
+          Confirmed >= data[index - 1]["Confirmed"]
+            ? Confirmed - data[index - 1]["Confirmed"]
+            : 0,
+        NewDeaths:
+          Deaths >= data[index - 1]["Deaths"]
+            ? Deaths - data[index - 1]["Deaths"]
+            : 0,
+        NewRecovered:
+          Recovered > data[index - 1]["Recovered"]
+            ? Recovered - data[index - 1]["Recovered"]
+            : 0,
+      };
+    } else {
+      return "";
+    }
+  });
+  data.shift();
+  return data;
 };
 
 export const fetchCountries = async () => {

@@ -1,0 +1,10 @@
+:root {
+  flex-grow: 1;
+}
+
+.navbar {
+  min-height: 50px !important;
+}
+.title {
+  flex-grow: 1;
+}

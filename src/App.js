@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Cards, Chart, CountryPicker } from "./components";
+import { Navbar, Cards, Chart, CountryPicker } from "./components";
 import { Alert } from "@material-ui/lab";
 import styles from "./App.module.css";
 import { fetchDailyData } from "./api";
@@ -34,12 +34,15 @@ class App extends React.Component {
   render() {
     const { data, country } = this.state;
     return (
-      <div className={styles.container}>
-        {this.state.msg && <Alert severity="error">{this.state.msg}</Alert>}
-        <CountryPicker handleCountryChange={this.handleCountryChange} />
-        <Cards {...data[data.length - 1]} />
-        <Chart dailyData={data} />
-      </div>
+      <>
+        <Navbar />
+        <div className={styles.container}>
+          {this.state.msg && <Alert severity="error">{this.state.msg}</Alert>}
+          <CountryPicker handleCountryChange={this.handleCountryChange} />
+          <Cards {...data[data.length - 1]} />
+          <Chart dailyData={data} />
+        </div>
+      </>
     );
   }
 }
