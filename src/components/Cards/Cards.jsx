@@ -1,16 +1,8 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Tooltip,
-  Fade,
-} from "@material-ui/core";
+import React from "react";
+import SingleCard from "./SingleCard";
+import { Grid } from "@material-ui/core";
 import styles from "./Cards.module.css";
-import CountUp from "react-countup";
 import cx from "classnames";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
 const tooltipTitles = {
   confirmed:
@@ -21,8 +13,6 @@ const tooltipTitles = {
 };
 
 const Cards = ({ dailyData }) => {
-  const [showIncrement, setShowIncrement] = useState(false);
-
   const {
     TotalConfirmed,
     TotalDeaths,
@@ -47,125 +37,36 @@ const Cards = ({ dailyData }) => {
   return (
     <div className={styles.container}>
       <Grid container spacing={3} justify="center">
-        <Grid
-          item
-          component={Card}
-          xs={12}
-          md={3}
-          className={cx(styles.card, styles.infected)}
-        >
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Cases
-            </Typography>
-            <Typography variant="h5">
-              <CountUp
-                start={0}
-                end={TotalConfirmed}
-                duration={2.5}
-                separator=","
-                onEnd={() => setShowIncrement(true)}
-              />
-            </Typography>
-            <Fade in={showIncrement}>
-              <Typography
-                variant="h6"
-                className={
-                  NewConfirmed > averageValues.confirmed
-                    ? styles.redText
-                    : styles.greenText
-                }
-              >
-                {`(+${NewConfirmed.toLocaleString()}) `}
-                {NewConfirmed > averageValues.confirmed ? (
-                  <FaArrowUp className={styles.iconStatus} />
-                ) : (
-                  <FaArrowDown className={styles.iconStatus} />
-                )}
-              </Typography>
-            </Fade>
+        <SingleCard
+          title={"Cases"}
+          description={"Number of cumulative confirmed cases to date*"}
+          tooltipText={tooltipTitles.confirmed}
+          totalValue={TotalConfirmed}
+          newValue={NewConfirmed}
+          averageValue={averageValues.confirmed}
+          style={cx(styles.card, styles.infected)}
+        />
 
-            <Tooltip title={tooltipTitles.confirmed}>
-              <Typography variant="body2">
-                Number of cumulative confirmed cases to date*
-              </Typography>
-            </Tooltip>
-          </CardContent>
-        </Grid>
-        <Grid
-          item
-          component={Card}
-          xs={12}
-          md={3}
-          className={cx(styles.card, styles.recovered)}
-        >
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Recovered
-            </Typography>
-            <Typography variant="h5">
-              <CountUp
-                start={0}
-                end={TotalRecovered}
-                duration={2.5}
-                separator=","
-              />
-            </Typography>
-            <Fade in={showIncrement}>
-              <Typography variant="h6">
-                {`(+${NewRecovered.toLocaleString()}) `}
-              </Typography>
-            </Fade>
-            <Tooltip title={tooltipTitles.recovered}>
-              <Typography variant="body2">
-                Number of cumulative recoveries to date*
-              </Typography>
-            </Tooltip>
-          </CardContent>
-        </Grid>
-        <Grid
-          item
-          component={Card}
-          xs={12}
-          md={3}
-          className={cx(styles.card, styles.deaths)}
-        >
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Deaths
-            </Typography>
-            <Typography variant="h5">
-              <CountUp
-                start={0}
-                end={TotalDeaths}
-                duration={2.5}
-                separator=","
-              />
-            </Typography>
-            <Fade in={showIncrement}>
-              <Typography
-                variant="h6"
-                className={
-                  NewDeaths > averageValues.deaths
-                    ? styles.redText
-                    : styles.greenText
-                }
-              >
-                {`(+${NewDeaths.toLocaleString()}) `}
-                {NewDeaths > averageValues.deaths ? (
-                  <FaArrowUp className={styles.iconStatus} />
-                ) : (
-                  <FaArrowDown className={styles.iconStatus} />
-                )}
-              </Typography>
-            </Fade>
-            <Tooltip title={tooltipTitles.deaths}>
-              <Typography variant="body2">
-                Number of cumulative deaths caused to date*
-              </Typography>
-            </Tooltip>
-          </CardContent>
-        </Grid>
+        <SingleCard
+          title={"Recovered"}
+          description={"Number of cumulative recoveries to date*"}
+          tooltipText={tooltipTitles.recovered}
+          totalValue={TotalRecovered}
+          newValue={NewRecovered}
+          averageValue={averageValues.recovered}
+          style={cx(styles.card, styles.recovered)}
+          positiveTrend={true}
+        />
+
+        <SingleCard
+          title={"Deaths"}
+          description={"Number of cumulative deaths caused to date*"}
+          tootlipText={tooltipTitles.deaths}
+          totalValue={TotalDeaths}
+          newValue={NewDeaths}
+          averageValue={averageValues.deaths}
+          style={cx(styles.card, styles.deaths)}
+        />
       </Grid>
     </div>
   );
